@@ -1,6 +1,8 @@
 #include "hex.h"
 
 #include <stdexcept>
+#include <sstream>
+#include <cstdio>
 
 namespace matasano {
 
@@ -32,6 +34,29 @@ hex_t string2hex(const std::string& string) {
     } else {
       throw std::runtime_error("isxdigit(string[i * 2]) && isxdigit(string[i * 2 + 1])");
     }
+  }
+  return result;
+}
+
+std::string hex2string(const hex_t& hex) {
+  std::stringstream ss;
+  char two_chars[2];
+  for (size_t i = 0; i < hex.size(); ++i)
+  {
+    sprintf(two_chars, "%02x", hex[i]);
+    ss << two_chars;
+  }
+  return ss.str();
+}
+
+hex_t x0r(const hex_t& one, const hex_t& two) {
+  if (one.size() != two.size()) {
+    throw std::runtime_error("one.size() != two.size()");
+  }
+  hex_t result;
+  result.resize(one.size());
+  for (size_t i = 0; i < one.size(); ++i) {
+    result[i] = one[i] ^ two[i];
   }
   return result;
 }
