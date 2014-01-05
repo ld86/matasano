@@ -7,7 +7,7 @@ namespace matasano {
   static size_t count_readable(const hex_t& hex) {
     size_t count = 0;
     for (size_t i = 0; i < hex.size(); ++i) {
-      if (isdigit(hex[i]) || isalpha(hex[i]) || hex[i] == ' ') {
+      if (isdigit(hex[i]) || isalpha(hex[i]) || isspace(hex[i])) {
         count++;
       }
     }
@@ -20,7 +20,7 @@ namespace matasano {
     for (uint16_t i = 0; i <= 0xff; ++i) {
       hex_t xored = x0r_with_byte(hex, i);
       size_t count = count_readable(xored);
-      if (count > max) {
+      if (count >= max) {
         max = count;
         key = i;
       }
