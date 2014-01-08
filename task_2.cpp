@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "hex.h"
+#include "crypto.h"
 
 int main(int argc, char** argv) {
   using namespace matasano;

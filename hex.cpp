@@ -23,6 +23,10 @@ uint8_t char2int(char symbol) {
 
 }
 
+hex_t text2hex(const std::string& string) {
+  return hex_t(string.begin(), string.end());
+}
+
 hex_t string2hex(const std::string& string) { 
   if (string.length() % 2 == 1) {
     throw std::runtime_error("string.length() % 2 == 1");
@@ -48,26 +52,6 @@ std::string hex2string(const hex_t& hex) {
     ss << two_chars;
   }
   return ss.str();
-}
-
-hex_t x0r_with_byte(const hex_t& hex, uint8_t byte) {
-  hex_t result(hex);
-  for (size_t i = 0; i < result.size(); ++i) {
-    result[i] ^= byte;
-  }
-  return result;
-}
-
-hex_t x0r(const hex_t& one, const hex_t& two) {
-  if (one.size() != two.size()) {
-    throw std::runtime_error("one.size() != two.size()");
-  }
-  hex_t result;
-  result.resize(one.size());
-  for (size_t i = 0; i < one.size(); ++i) {
-    result[i] = one[i] ^ two[i];
-  }
-  return result;
 }
 
 void print(const hex_t& hex) {
