@@ -58,4 +58,19 @@ hex_t x0r(const hex_t& one, const hex_t& two) {
   return result;
 }
 
+size_t hamming(const hex_t& one, const hex_t& two) {
+  size_t result = 0;
+  if (one.size() != two.size()) {
+    throw std::runtime_error("one.size() != two.size()");
+  }
+  for (size_t i = 0; i < one.size(); ++i) {
+    uint8_t c = one[i] ^ two[i];
+    c = (c & 0x55) + ((c >> 1) & 0x55);
+    c = (c & 0x33) + ((c >> 2) & 0x33);
+    c = (c & 0x0F) + ((c >> 4) & 0x0F);
+    result += c;
+  }
+  return result;
+}
+
 } // namespace matasano
