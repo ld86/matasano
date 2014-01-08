@@ -10,4 +10,5 @@ namespace matasano {
   hex_t string2hex(const std::string& string);
   std::string hex2string(const hex_t& hex);
   void print(const hex_t& hex);
+  void print_digits(const hex_t& hex);
 } // namespace matasano

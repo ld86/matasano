@@ -16,7 +16,7 @@ static size_t count_readable(const hex_t& hex) {
   return count;
 }
 
-uint8_t find_x0r_key(const hex_t& hex) {
+uint8_t find_x0r_byte(const hex_t& hex) {
   size_t max = 0;
   uint8_t key = 0;
   for (uint16_t i = 0; i <= 0xff; ++i) {
@@ -28,6 +28,14 @@ uint8_t find_x0r_key(const hex_t& hex) {
     }
   }
   return key;
+}
+
+hex_t x0r_with_key(const hex_t& e, const hex_t& key) {
+  hex_t result(e);
+  for (size_t i = 0; i < result.size(); ++i) {
+    result[i] ^= key[i % key.size()];
+  }
+  return result;
 }
 
 hex_t x0r_with_byte(const hex_t& hex, uint8_t byte) {

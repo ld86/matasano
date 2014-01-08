@@ -60,4 +60,10 @@ void print(const hex_t& hex) {
   }
 }
 
+void print_digits(const hex_t& hex) {
+  for (int i = 0; i < hex.size(); ++i) {
+    printf("%02x", hex[i]);
+  }
+}
+
 } // namespace matasano
