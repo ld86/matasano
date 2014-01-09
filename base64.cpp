@@ -2,6 +2,8 @@
 #include "hex.h"
 
 #include <sstream>
+#include <stdexcept>
+#include <iostream>
 
 namespace matasano {
 
@@ -21,12 +23,18 @@ std::string base64step(char one, char two, char three) {
   return ss.str();
 }
 
-std::string back_base64step(char one, char two, char three, char four) {
-  /*
-  char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
-  char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
-  char_array_3[2] = ((char_array_4[2] & 0x3) << 6) + char_array_4[3];
-  */
+hex_t back_base64step(char one, char two, char three, char four) {
+  hex_t result;
+  
+  one = base64_chars.find(one);
+  two = base64_chars.find(two);
+  three = base64_chars.find(three);
+  four = base64_chars.find(four);
+
+  result.push_back((one << 2) + ((two & 0x30) >> 4));
+  result.push_back(((two & 0xf) << 4) + ((three & 0x3c) >> 2));
+  result.push_back(((three & 0x3) << 6) + four);
+  return result;
 }
 
 }
@@ -51,7 +59,26 @@ std::string hex2base64(const hex_t& hex) {
 }
 
 hex_t base642hex(const std::string& string) {
-  return hex_t();
+  hex_t result;
+  std::string cutted_string = string;
+  if (string.length() % 4 != 0) {
+    throw std::runtime_error("if (string.length() % 4 != 0)");
+  }
+  size_t padding_count = string.find("=") == std::string::npos ? 0 : string.length() - string.find("=");
+  if (padding_count) {
+    cutted_string.replace(string.length() - padding_count, padding_count, padding_count, 'A'); 
+  }
+  for (size_t i = 0; i < string.length() / 4; ++i) {
+    hex_t block = back_base64step(string[i * 4],
+                                  string[i * 4 + 1],
+                                  string[i * 4 + 2],
+                                  string[i * 4 + 3]);
+    result.insert(result.end(), block.begin(), block.end());
+  }
+  for (size_t i = 0; i < padding_count; ++i) {
+    result.pop_back();
+  }
+  return result;
 }
 
 } // namespace matasano
