@@ -21,6 +21,14 @@ std::string base64step(char one, char two, char three) {
   return ss.str();
 }
 
+std::string back_base64step(char one, char two, char three, char four) {
+  /*
+  char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
+  char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
+  char_array_3[2] = ((char_array_4[2] & 0x3) << 6) + char_array_4[3];
+  */
+}
+
 }
 
 std::string hex2base64(const hex_t& hex) {
@@ -29,16 +37,17 @@ std::string hex2base64(const hex_t& hex) {
   for (size_t i = 0; i < padding_count; ++i) {
     padded_hex.push_back(0);
   }
-  std::stringstream result;
+  std::string result;
   for (size_t i = 0; i < padded_hex.size() / 3; ++i) {
-    result << base64step(padded_hex[i * 3],
+    result += base64step(padded_hex[i * 3],
                          padded_hex[i * 3 + 1],
                          padded_hex[i * 3 + 2]);
   }
+  result = result.substr(0, result.length() - padding_count);
   for (size_t i = 0; i < padding_count; ++i) {
-    result << '=';
+    result += "=";
   }
-  return result.str();
+  return result;
 }
 
 hex_t base642hex(const std::string& string) {
